@@ -29,10 +29,7 @@ public class NewPostActivity extends AppCompatActivity {
 
         EditText titleEditText =  findViewById(R.id.post_title);
         EditText contentEditText = findViewById(R.id.post_content);
-        ServerInterface.Posts.sendPost(1,
-                titleEditText.getText().toString(),
-                contentEditText.getText().toString(),
-                getApplicationContext());
+        new ServerInterface.Posts.Upload(this, 1,  titleEditText.getText().toString(), contentEditText.getText().toString()).execute();
 
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
