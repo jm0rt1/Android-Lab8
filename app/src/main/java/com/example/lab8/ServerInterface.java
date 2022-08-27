@@ -181,5 +181,32 @@ public class ServerInterface {
             }
         }
 
+
+        final static class Delete extends AsyncTask<Void, Integer, Boolean> {
+
+            private final String mId;
+
+            public Delete(String id) {
+                mId = id;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                try {
+                    return ServerInterface.Posts.deletePost(mId);
+
+                } catch (Exception e) {
+                    Log.e(TAG,e.toString());
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+
+            }
+        }
+
     }
 }

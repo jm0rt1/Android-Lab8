@@ -57,7 +57,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder>{
                         //Yes button clicked
                         Intent intent = new Intent(v.getContext(),MainActivity.class);
 
-                        ServerInterface.Posts.deletePost(holder.id);
+//                        ServerInterface.Posts.deletePost(holder.id);
+                        new ServerInterface.Posts.Delete(holder.id).execute();
                         v.getContext().startActivity(intent);
 
                         break;
