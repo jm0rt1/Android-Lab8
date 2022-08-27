@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -17,11 +20,47 @@ import android.view.MenuItem;
 
 import org.json.JSONException;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     public static final String TAG = "MainActivity";
+    final static class WorkerDownloadPosts extends AsyncTask<Void, Integer, ArrayList<String[]>> {
+
+        private final WeakReference<Activity> parentRef;
+        private final WeakReference<RecyclerView> recyclerViewRef;
+
+        public WorkerDownloadPosts(final Activity parent, RecyclerView recyclerView) {
+            parentRef = new WeakReference<Activity>(parent);
+            recyclerViewRef= new WeakReference<RecyclerView>(recyclerView);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected ArrayList<String[]> doInBackground(Void... voids) {
+            try {
+                ArrayList<String[]> posts = ServerInterface.Posts.getPosts();
+                return posts;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String[]> data) {
+
+
+            final PostRecyclerAdapter adapter = new PostRecyclerAdapter(parentRef.get().getApplicationContext(), data);
+
+            recyclerViewRef.get().setHasFixedSize(true);
+            recyclerViewRef.get().setAdapter(adapter);
+            recyclerViewRef.get().setItemAnimator(new DefaultItemAnimator());
+        }
+    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -34,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
+
             recyclerView = findViewById(R.id.recycler_view);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            layoutManager.scrollToPosition(0);
+            recyclerView.setLayoutManager(layoutManager);
 
             RefreshRecyclerView();
         } catch (Exception e){
@@ -70,25 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void RefreshRecyclerView(){
-        try{
-            ArrayList<String[]> data = ServerInterface.Posts.getPosts();
-
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            layoutManager.scrollToPosition(0);
-            recyclerView.setLayoutManager(layoutManager);
-
-
-            final PostRecyclerAdapter adapter = new PostRecyclerAdapter(this, data);
-
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-        } catch (JSONException e) {
-            Log.e(TAG,e.toString());
-        }
-
+        new WorkerDownloadPosts(this, recyclerView).execute();
     }
 
 
