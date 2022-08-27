@@ -1,4 +1,4 @@
-package com.example.lab7;
+package com.example.lab8;
 
 import android.view.View;
 import android.widget.TextView;

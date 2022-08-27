@@ -1,8 +1,7 @@
-package com.example.lab7;
+package com.example.lab8;
 
 import android.content.Context;
 import android.os.Build;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -11,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.Key;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;

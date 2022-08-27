@@ -1,11 +1,10 @@
-package com.example.lab7;
+package com.example.lab8;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder>{
     public static String TAG = "PostRecyclerAdapter";

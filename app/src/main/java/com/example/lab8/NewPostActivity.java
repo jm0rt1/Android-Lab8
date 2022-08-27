@@ -1,4 +1,4 @@
-package com.example.lab7;
+package com.example.lab8;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class NewPostActivity extends AppCompatActivity {
 

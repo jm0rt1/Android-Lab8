@@ -1,4 +1,4 @@
-package com.example.lab7;
+package com.example.lab8;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
