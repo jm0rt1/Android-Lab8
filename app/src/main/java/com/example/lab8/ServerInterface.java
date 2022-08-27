@@ -43,7 +43,7 @@ public class ServerInterface {
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
-        public static ArrayList<String> getTitles() throws JSONException {
+        private static ArrayList<String> getTitles() throws JSONException {
             guard();
 
             JSONArray jsonArray = new JSONArray(postsJsonCache);
@@ -109,7 +109,7 @@ public class ServerInterface {
             return false;
         }
 
-        public static boolean deletePost(String id){
+        private static boolean deletePost(String id){
             boolean result = ServerCommands.sendHttpDeleteRequest(ServerCommands.Urls.POSTS_DELETE +"?id="+ id);
             return result;
         }
