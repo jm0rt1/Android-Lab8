@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -63,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 return true;
+            case R.id.schedule:
+                Schedulers.scheduleJob(getApplicationContext());
+            case R.id.alarm:
+                Alarm a = new Alarm();
+                a.setQuickAlarm(getApplicationContext());
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -8,4 +8,12 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_add_item"
         />
+    <item
+        android:id="@+id/alarm"
+        android:title="set alarm"
+        />
+    <item
+        android:id="@+id/schedule"
+        android:title="Schedule Job"
+        />
 </menu>
