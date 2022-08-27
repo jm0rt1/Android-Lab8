@@ -2,14 +2,10 @@ package com.example.lab8;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,49 +14,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import org.json.JSONException;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     public static final String TAG = "MainActivity";
-    final static class WorkerDownloadPosts extends AsyncTask<Void, Integer, ArrayList<String[]>> {
-
-        private final WeakReference<Activity> parentRef;
-        private final WeakReference<RecyclerView> recyclerViewRef;
-
-        public WorkerDownloadPosts(final Activity parent, RecyclerView recyclerView) {
-            parentRef = new WeakReference<Activity>(parent);
-            recyclerViewRef= new WeakReference<RecyclerView>(recyclerView);
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected ArrayList<String[]> doInBackground(Void... voids) {
-            try {
-                ArrayList<String[]> posts = ServerInterface.Posts.getPosts();
-                return posts;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<String[]> data) {
-
-
-            final PostRecyclerAdapter adapter = new PostRecyclerAdapter(parentRef.get().getApplicationContext(), data);
-
-            recyclerViewRef.get().setHasFixedSize(true);
-            recyclerViewRef.get().setAdapter(adapter);
-            recyclerViewRef.get().setItemAnimator(new DefaultItemAnimator());
-        }
-    }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -114,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void RefreshRecyclerView(){
-        new WorkerDownloadPosts(this, recyclerView).execute();
+        new ServerInterface.Posts.Download(this, recyclerView).execute();
     }
 
 

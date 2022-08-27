@@ -1,15 +1,20 @@
 package com.example.lab8;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -106,6 +111,43 @@ public class ServerInterface {
             boolean result = ServerCommands.sendHttpDeleteRequest(ServerCommands.Urls.POSTS_DELETE +"?id="+ id);
             return result;
         }
-    }
+
+        final static class Download extends AsyncTask<Void, Integer, ArrayList<String[]>> {
+
+            private final WeakReference<Activity> parentRef;
+            private final WeakReference<RecyclerView> recyclerViewRef;
+
+            public Download(final Activity parent, RecyclerView recyclerView) {
+                parentRef = new WeakReference<Activity>(parent);
+                recyclerViewRef= new WeakReference<RecyclerView>(recyclerView);
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            protected ArrayList<String[]> doInBackground(Void... voids) {
+                try {
+                    ArrayList<String[]> posts = ServerInterface.Posts.getPosts();
+                    return posts;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<String[]> data) {
+
+
+                final PostRecyclerAdapter adapter = new PostRecyclerAdapter(parentRef.get().getApplicationContext(), data);
+
+                recyclerViewRef.get().setHasFixedSize(true);
+                recyclerViewRef.get().setAdapter(adapter);
+                recyclerViewRef.get().setItemAnimator(new DefaultItemAnimator());
+            }
+        }
+
+
+
 
 }
